@@ -6,7 +6,7 @@ const castUrl = `https://api.themoviedb.org/3/movie`;
 // JQuery will be used for the AJAX requests
 
 // The Promise WAY
-// Take a movieTitle to get movieData
+// Take a movieTitle and 'get/fetch' the movieData
 function getMovieData(movieTitle) {
     return new Promise((resolve, reject) =>{
         $.ajax({
@@ -23,7 +23,7 @@ function getMovieData(movieTitle) {
     })
 }
 
-// Take the movieTitle to fetch the cast/castData
+// Take the movieTitle and  'get/fetch' the cast/castData
 function getCast(movie) {
     // console.log(movie);
     return new Promise((resolve, reject) => {
@@ -37,12 +37,12 @@ function getCast(movie) {
     })
 }
 
-// Then, take the first person in the castData to fetch the person object in the movie
+// Then, take the first person in the castData and 'get/fetch' the person object in the movie
 function getPerson(person) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) =>{
         $.ajax({
             url: `${peopleUrl}/${person.id}?api_key=${apiKey}`,
-            success: (personData) => {
+            success: (personData) =>{
                 resolve(personData)
             }
         })
@@ -50,21 +50,68 @@ function getPerson(person) {
 }
 
 
+
+async function addMovieToDom(movieTitle) {
+    document.getElementById('movies').innerHTML = "";
+
+    const movieData = await getMovieData(movieTitle);
+    const castData = await getCast(movieData[0]);
+    const personData = await getPerson(castData[0]);
+    
+    
+    document.getElementById('movies').innerHTML += `
+        <div class="col-sm-4">
+            <div>
+                <img src="${imgUrl}${movieData[0].poster_path}" />
+            </div>
+            
+            <div>
+                <img src="${imgUrl}${personData.profile_path}" />
+            </div>
+        </div>
+    `
+}
+
+
+// Refactor this code with a function that our submit handlers can call
+// 
+
 document.getElementById('movie-form').addEventListener('submit',(event)=> {
     event.preventDefault();
-    const movieElem = Array.from(document.getElementsByClassName('movie-title'))
-    // console.log(movieElem);
-    const moviePromise = getMovieData(movieElem[0].value)
-    moviePromise.then((movieData)=> {
-        // console.log(movieData);
-        return getCast(movieData[0]);
-    }).then((castInfo) => {
-        // console.log(personInfo)
-        return getPerson(castInfo)
-    }).then((personInfo) => {
-        console.log(personInfo)
+    const movieElems = Array.from(document.getElementsByClassName('movie-title'))
+    movieElems.forEach((elem)=> {
+        addMovieToDom(elem.value);
     })
+
+    // const moviePromise = getMovieData(movieElem[0].value)
+    // moviePromise.then((movieData)=> {
+    //     // console.log(movieData);
+    //     return getCast(movieData[0]);
+    // }).then((castInfo) => {
+    //     // console.log(personInfo)
+    //     return getPerson(castInfo)
+    // }).then((personInfo) => {
+    //     console.log(personInfo)
+    // })
 });
+
+
+// 1st Code - Refactor this JS DOM manipulation with functions
+// document.getElementById('movie-form').addEventListener('submit',(event)=> {
+//     event.preventDefault();
+//     const movieElem = Array.from(document.getElementsByClassName('movie-title'))
+//     // console.log(movieElem);
+//     const moviePromise = getMovieData(movieElem[0].value)
+//     moviePromise.then((movieData)=> {
+//         // console.log(movieData);
+//         return getCast(movieData[0]);
+//     }).then((castInfo) => {
+//         // console.log(personInfo)
+//         return getPerson(castInfo)
+//     }).then((personInfo) => {
+//         console.log(personInfo)
+//     })
+// });
 
 
 
