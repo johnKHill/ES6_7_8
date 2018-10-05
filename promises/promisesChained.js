@@ -3,9 +3,10 @@ const apiUrl = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&quer
 const imgUrl = `http://image.tmdb.org/t/p/w300/`;
 const peopleUrl = `https://api.themoviedb.org/3/person`;
 const castUrl = `https://api.themoviedb.org/3/movie`;
-
+// JQuery will be used for the AJAX requests
 
 // The Promise WAY
+// Take a movieTitle to get movieData
 function getMovieData(movieTitle) {
     return new Promise((resolve, reject) =>{
         $.ajax({
@@ -22,7 +23,7 @@ function getMovieData(movieTitle) {
     })
 }
 
-
+// Take the movieTitle to fetch the cast/castData
 function getCast(movie) {
     // console.log(movie);
     return new Promise((resolve, reject) => {
@@ -36,6 +37,7 @@ function getCast(movie) {
     })
 }
 
+// Then, take the first person in the castData to fetch the person object in the movie
 function getPerson(person) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -68,7 +70,7 @@ document.getElementById('movie-form').addEventListener('submit',(event)=> {
 
 
 
-// Callback Hell
+// Avoid Callback Hell
         // $.ajax({
         //     url: `${apiUrl}rocky`,
         //     method: 'get',
