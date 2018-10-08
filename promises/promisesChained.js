@@ -23,7 +23,7 @@ function getMovieData(movieTitle) {
     })
 }
 
-// Take the movieTitle and  'get/fetch' the cast/castData
+// Take the movieTitle and 'get/fetch' the cast/castData
 function getCast(movie) {
     // console.log(movie);
     return new Promise((resolve, reject) => {
@@ -56,8 +56,7 @@ async function addMovieToDom(movieTitle) {
 
     const movieData = await getMovieData(movieTitle);
     const castData = await getCast(movieData[0]);
-    const personData = await getPerson(castData[0]);
-    
+    const personData = await getPerson(castData);
     
     document.getElementById('movies').innerHTML += `
         <div class="col-sm-4">
@@ -74,8 +73,6 @@ async function addMovieToDom(movieTitle) {
 
 
 // Refactor this code with a function that our submit handlers can call
-// 
-
 document.getElementById('movie-form').addEventListener('submit',(event)=> {
     event.preventDefault();
     const movieElems = Array.from(document.getElementsByClassName('movie-title'))
@@ -96,7 +93,7 @@ document.getElementById('movie-form').addEventListener('submit',(event)=> {
 });
 
 
-// 1st Code - Refactor this JS DOM manipulation with functions
+// 1st Code using the promise then- Refactor this JS DOM manipulation with functions
 // document.getElementById('movie-form').addEventListener('submit',(event)=> {
 //     event.preventDefault();
 //     const movieElem = Array.from(document.getElementsByClassName('movie-title'))
