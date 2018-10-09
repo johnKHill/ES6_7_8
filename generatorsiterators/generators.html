@@ -1,0 +1,19 @@
+<!-- generators.html -->
+<button class="btn">Click to run the generator!</button>
+
+<script type="text/javascript">
+    function* counter(){
+        let i = 0;
+        while(true){
+            console.log("I'm before the yield");
+            const dataFromNext = yield i++;
+            console.log(dataFromNext, i);
+        }
+    }
+
+    const gen = counter();
+    document.querySelector('.btn').addEventListener('click', ()=>{
+        // A value passed to next() will be treated as the result of the last yield expression that paused the generator.
+        console.log(gen.next('This is some data'));
+    })
+</script>
